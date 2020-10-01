@@ -41,6 +41,71 @@ final class WildbeastTest extends TestCase
         $this->assertTrue($luck === $wildBeast->getLuck());
     }
 
+    public function testWrongHealth(): void
+    {
+        $this->expectException(OutOfRangeException::class);
+
+        $wildbeast = new Wildbeast(
+            60,
+            79,
+            55,
+            40,
+            10
+        );
+    }
+
+    public function testWrongStrength(): void
+    {
+        $this->expectException(OutOfRangeException::class);
+
+        $wildbeast = new Wildbeast(
+            100,
+            50,
+            55,
+            40,
+            10
+        );
+    }
+
+    public function testWrongDefence(): void
+    {
+        $this->expectException(OutOfRangeException::class);
+
+        $wildbeast = new Wildbeast(
+            100,
+            79,
+            100,
+            40,
+            10
+        );
+    }
+
+    public function testWrongSpeed(): void
+    {
+        $this->expectException(OutOfRangeException::class);
+
+        $wildbeast = new Wildbeast(
+            100,
+            79,
+            55,
+            100,
+            10
+        );
+    }
+
+    public function testWrongLuck(): void
+    {
+        $this->expectException(OutOfRangeException::class);
+
+        $wildbeast = new Wildbeast(
+            100,
+            79,
+            55,
+            40,
+            100
+        );
+    }
+
     public function newWildBeastData(): array
     {
         return [
