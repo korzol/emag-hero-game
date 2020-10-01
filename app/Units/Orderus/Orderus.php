@@ -86,7 +86,7 @@ class Orderus implements UnitsBaseSkillsInterface, OrderusInterface
     {
         if ($this->health < $this->stats["health"][0] || $this->health > $this->stats["health"][1])
         {
-            throw new OutOfRangeException("Health value is out of range: ${$this->stats["health"][0]} - ${$this->stats["health"][1]}");
+            throw new OutOfRangeException("Health value is out of range: {$this->stats["health"][0]} - {$this->stats["health"][1]}");
         }
     }
 
@@ -94,7 +94,7 @@ class Orderus implements UnitsBaseSkillsInterface, OrderusInterface
     {
         if ($this->strength < $this->stats["strength"][0] || $this->strength > $this->stats["strength"][1])
         {
-            throw new OutOfRangeException("Strength value is out of range: ${$this->stats["strength"][0]} - ${$this->stats["strength"][1]}");
+            throw new OutOfRangeException("Strength value is out of range: {$this->stats["strength"][0]} - {$this->stats["strength"][1]}");
         }
     }
 
@@ -102,7 +102,7 @@ class Orderus implements UnitsBaseSkillsInterface, OrderusInterface
     {
         if ($this->defence < $this->stats["defence"][0] || $this->defence > $this->stats["defence"][1])
         {
-            throw new OutOfRangeException("Defence value is out of range: ${$this->stats["defence"][0]} - ${$this->stats["defence"][1]}");
+            throw new OutOfRangeException("Defence value is out of range: {$this->stats["defence"][0]} - {$this->stats["defence"][1]}");
         }
     }
 
@@ -110,7 +110,7 @@ class Orderus implements UnitsBaseSkillsInterface, OrderusInterface
     {
         if ($this->speed < $this->stats["speed"][0] || $this->speed > $this->stats["speed"][1])
         {
-            throw new OutOfRangeException("Speed value is out of range: ${$this->stats["speed"][0]} - ${$this->stats["speed"][1]}");
+            throw new OutOfRangeException("Speed value is out of range: {$this->stats["speed"][0]} - {$this->stats["speed"][1]}");
         }
     }
 
@@ -118,7 +118,7 @@ class Orderus implements UnitsBaseSkillsInterface, OrderusInterface
     {
         if ($this->luck < $this->stats["luck"][0] || $this->luck > $this->stats["luck"][1])
         {
-            throw new OutOfRangeException("Luck value is out of range: ${$this->stats["luck"][0]} - ${$this->stats["luck"][1]}");
+            throw new OutOfRangeException("Luck value is out of range: {$this->stats["luck"][0]} - {$this->stats["luck"][1]}");
         }
     }
 
@@ -126,7 +126,7 @@ class Orderus implements UnitsBaseSkillsInterface, OrderusInterface
     {
         if ($this->rapidStrike != $this->stats["rapidStrike"])
         {
-            throw new UnexpectedValueException("Rapid strike value should be equal to: ${$this->stats['rapidStrike']}");
+            throw new UnexpectedValueException("Rapid strike value should be equal to: {$this->stats['rapidStrike']}");
         }
     }
 
@@ -134,7 +134,7 @@ class Orderus implements UnitsBaseSkillsInterface, OrderusInterface
     {
         if ($this->magicShield != $this->stats["magicShield"])
         {
-            throw new UnexpectedValueException("Magic Shield value should be equal to: ${$this->stats["magicShield"]}");
+            throw new UnexpectedValueException("Magic Shield value should be equal to: {$this->stats["magicShield"]}");
         }
     }
 
@@ -179,6 +179,11 @@ class Orderus implements UnitsBaseSkillsInterface, OrderusInterface
         $randomValue = random_int(0, 1000);
 
         return $randomValue <= $probability;
+    }
+
+    public function getHealth(): int
+    {
+        return $this->health;
     }
 
     public function getStrength(): int
