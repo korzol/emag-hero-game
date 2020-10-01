@@ -9,7 +9,7 @@ use App\Units\OrderusBuilder;
 
 final class OrderusBuilderTest extends TestCase
 {
-    public function testBuilder()
+    public function testBuilder(): void
     {
         $orderusBuilder = new OrderusBuilder();
         $orderus = $orderusBuilder->build();

@@ -5,7 +5,6 @@ namespace tests\Units\Opponents\Wildbeast;
 
 use PHPUnit\Framework\TestCase;
 use App\Units\Opponents\Wildbeast\Wildbeast;
-//use App\Units\Opponents\WildbeastBuilder;
 use OutOfRangeException;
 
 final class WildbeastTest extends TestCase
@@ -42,7 +41,7 @@ final class WildbeastTest extends TestCase
         $this->assertTrue($luck === $wildBeast->getLuck());
     }
 
-    public function newWildBeastData()
+    public function newWildBeastData(): array
     {
         return [
             [

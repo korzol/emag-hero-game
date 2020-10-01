@@ -43,7 +43,7 @@ final class OrderusTest extends TestCase
 
     }
 
-    public function testWrongHealth()
+    public function testWrongHealth(): void
     {
         $this->expectException(OutOfRangeException::class);
 
@@ -56,7 +56,7 @@ final class OrderusTest extends TestCase
         );
     }
 
-    public function testWrongStrength()
+    public function testWrongStrength(): void
     {
         $this->expectException(OutOfRangeException::class);
 
@@ -69,7 +69,7 @@ final class OrderusTest extends TestCase
         );
     }
 
-    public function testWrongDefence()
+    public function testWrongDefence(): void
     {
         $this->expectException(OutOfRangeException::class);
 
@@ -82,7 +82,7 @@ final class OrderusTest extends TestCase
         );
     }
 
-    public function testWrongSpeed()
+    public function testWrongSpeed(): void
     {
         $this->expectException(OutOfRangeException::class);
 
@@ -95,7 +95,7 @@ final class OrderusTest extends TestCase
         );
     }
 
-    public function testWrongLuck()
+    public function testWrongLuck(): void
     {
         $this->expectException(OutOfRangeException::class);
 
@@ -108,7 +108,7 @@ final class OrderusTest extends TestCase
         );
     }
 
-    public function newOrderusData()
+    public function newOrderusData(): array
     {
         return [
             [
