@@ -4,3 +4,4 @@ composer.phar
 phpstan.neon
 .phpunit.result.cache
 UnitsConfiguration.yml
+
