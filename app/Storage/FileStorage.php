@@ -11,7 +11,9 @@ class FileStorage implements StorageInterface
     private const UNITS_CONFIGURATION_FILE = 'UnitsConfiguration.yml';
 
     /**
-     * @inheritDoc
+     * @param string $unitType Hero or Opponent
+     * @param string $unitName Like Orderus or Wild Beast
+     * @return array<string, mixed>
      */
     public function getPropertiesRangeForUnit(string $unitType, string $unitName): array
     {
