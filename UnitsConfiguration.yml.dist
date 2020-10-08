@@ -1,40 +1,46 @@
 heroes:
   0:
-    name: Orderus
-    stats:
-      health:
-        - 70
-        - 100
-      strength:
-        - 70
-        - 80
-      defence:
-        - 45
-        - 55
-      speed:
-        - 40
-        - 50
-      luck:
-        - 10
-        - 30
+    name: Hero
+    health:
+      - 80
+      - 100
+    strength:
+      - 70
+      - 80
+    defence:
+      - 45
+      - 55
+    speed:
+      - 40
+      - 50
+    luck:
+      - 10
+      - 30
+    rapidStrike:
+      10
+    magicShield:
+      20
   1:
     name: Orderus
-    stats:
-      health:
-        - 70
-        - 100
-      strength:
-        - 70
-        - 80
-      defence:
-        - 45
-        - 55
-      speed:
-        - 40
-        - 50
-      luck:
-        - 10
-        - 30
+    health:
+      - 70
+      - 100
+    strength:
+      - 70
+      - 80
+    defence:
+      - 45
+      - 55
+    speed:
+      - 40
+      - 50
+    luck:
+      - 10
+      - 30
+    rapidStrike:
+      10
+    magicShield:
+      20
 
 opponents:
   0:

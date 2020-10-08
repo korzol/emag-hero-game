@@ -1,56 +1,62 @@
 <?php
 declare(strict_types=1);
 
-namespace tests\Units\Opponents\Wildbeast;
+namespace tests\Units;
 
+use LengthException;
 use PHPUnit\Framework\TestCase;
-use App\Units\Opponents\Wildbeast\Wildbeast;
+use App\Units\BaseUnit;
 use OutOfRangeException;
 
-final class WildbeastTest extends TestCase
+final class BaseUnitTest extends TestCase
 {
     /**
      * @test
-     * @dataProvider newWildbeastData
+     * @dataProvider newBaseUnitData
      * @param int $health
      * @param int $strength
      * @param int $defence
      * @param int $speed
      * @param int $luck
+     * @param string $unitName
      */
     public function new(
         int $health,
         int $strength,
         int $defence,
         int $speed,
-        int $luck
+        int $luck,
+        string $unitName
     ): void
     {
-        $wildBeast = new Wildbeast(
+        $unit = new BaseUnit(
             $health,
             $strength,
             $defence,
             $speed,
-            $luck
+            $luck,
+            $unitName
         );
 
-        $this->assertTrue($health === $wildBeast->getHealth());
-        $this->assertTrue($strength === $wildBeast->getStrength());
-        $this->assertTrue($defence === $wildBeast->getDefence());
-        $this->assertTrue($speed === $wildBeast->getSpeed());
-        $this->assertTrue($luck === $wildBeast->getLuck());
+        $this->assertTrue($health === $unit->getHealth());
+        $this->assertTrue($strength === $unit->getStrength());
+        $this->assertTrue($defence === $unit->getDefence());
+        $this->assertTrue($speed === $unit->getSpeed());
+        $this->assertTrue($luck === $unit->getLuck());
+        $this->assertTrue($unitName === $unit->getUnitName());
     }
 
     public function testWrongHealth(): void
     {
         $this->expectException(OutOfRangeException::class);
 
-        $wildbeast = new Wildbeast(
-            60,
+        $unit = new BaseUnit(
+            160,
             79,
             55,
             40,
-            10
+            10,
+            'Wild Beast'
         );
     }
 
@@ -58,12 +64,13 @@ final class WildbeastTest extends TestCase
     {
         $this->expectException(OutOfRangeException::class);
 
-        $wildbeast = new Wildbeast(
+        $unit = new BaseUnit(
             100,
-            50,
+            150,
             55,
             40,
-            10
+            10,
+            'Wild Beast'
         );
     }
 
@@ -71,12 +78,13 @@ final class WildbeastTest extends TestCase
     {
         $this->expectException(OutOfRangeException::class);
 
-        $wildbeast = new Wildbeast(
+        $unit = new BaseUnit(
             100,
             79,
-            100,
+            110,
             40,
-            10
+            10,
+            'Wild Beast'
         );
     }
 
@@ -84,12 +92,13 @@ final class WildbeastTest extends TestCase
     {
         $this->expectException(OutOfRangeException::class);
 
-        $wildbeast = new Wildbeast(
+        $unit = new BaseUnit(
             100,
             79,
             55,
-            100,
-            10
+            110,
+            10,
+            'Wild Beast'
         );
     }
 
@@ -97,16 +106,31 @@ final class WildbeastTest extends TestCase
     {
         $this->expectException(OutOfRangeException::class);
 
-        $wildbeast = new Wildbeast(
+        $unit = new BaseUnit(
             100,
             79,
             55,
             40,
-            100
+            110,
+            'Wild Beast'
         );
     }
 
-    public function newWildBeastData(): array
+    public function testEmptyName(): void
+    {
+        $this->expectException(LengthException::class);
+
+        $hero = new BaseUnit(
+            100,
+            79,
+            55,
+            40,
+            30,
+            ''
+        );
+    }
+
+    public function newBaseUnitData(): array
     {
         return [
             [
@@ -115,6 +139,7 @@ final class WildbeastTest extends TestCase
                 40, // defence
                 40, // speed
                 25, // luck
+                'Wild Beast', // unit name
             ],
             [
                 90, // health
@@ -122,7 +147,7 @@ final class WildbeastTest extends TestCase
                 60, // defence
                 60, // speed
                 40, // luck
-
+                'Unit', // unit name
             ],
         ];
     }
