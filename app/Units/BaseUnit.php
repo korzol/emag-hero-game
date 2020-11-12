@@ -124,7 +124,6 @@ class BaseUnit implements BaseUnitInterface
      */
     public function setHealth(int $health): void
     {
-        // TODO: Maybe make it 0 if health < 0 and make it 100 if health > 100 ?
         $this->validateHealth();
 
         $this->health = $health;

@@ -3,159 +3,133 @@ declare(strict_types=1);
 
 namespace App\Battle;
 
-use App\Units\BaseUnitInterface;
-use LogicException;
+use App\Battle\Message\MessageFactory;
+use App\Battle\Participants\Attacker;
+use App\Battle\Participants\Defender;
+use App\Output\OutputInterface;
 
-// TODO: This is a draft, working but ugly battle class. Refactor required
-class Battle implements BattleInterface
+final class Battle implements BattleInterface
 {
+    private Attacker $attacker;
+
+    private Defender $defender;
+
+    private OutputInterface $output;
+
+    private bool $canContinue;
+
+    public function __construct(OutputInterface $output)
+    {
+        $this->output = $output;
+        $this->canContinue = true;
+    }
+
+    private function setRoles(Disposition $disposition): void
+    {
+        $roles = $disposition->getPositions();
+
+        $this->attacker = $roles['attacker'];
+        $this->defender = $roles['defender'];
+    }
+
+    private function inverseRoles(Disposition $disposition): void
+    {
+        $roles = $disposition->inversePositions();
+
+        $this->attacker = $roles['attacker'];
+        $this->defender = $roles['defender'];
+    }
+
     /**
-     * @var BaseUnitInterface $hero
+     * @param Disposition $disposition
      */
-    private $hero;
-
-    /**
-     * @var BaseUnitInterface $opponent
-     */
-    private $opponent;
-
-    /**
-     * @var array<string, BaseUnitInterface> $disposition
-     */
-    private $disposition;
-
-    public function __construct(BaseUnitInterface $hero, BaseUnitInterface $opponent)
+    public function run(Disposition $disposition): void
     {
-        $this->hero = $hero;
-        $this->opponent = $opponent;
 
-        $this->disposition = [
-            'attacker' => $this->opponent,
-            'defender' => $this->hero,
-        ];
+        $this->setRoles($disposition);
 
-        $this->defineFirstAttacker();
-    }
+        $this->sendInitialMessage();
 
-    private function defineFirstAttacker(): void
-    {
-        $this->compareSpeed();
-    }
+        for($i = 1; $i <= 20; ++$i) {
+            $this->attack($i);
 
-    private function isSpeedEqual(): bool
-    {
-        return $this->hero->getSpeed() == $this->opponent->getSpeed();
-    }
-
-    private function compareSpeed(): void
-    {
-        if ($this->isSpeedEqual())
-        {
-            $this->compareLuck();
-            return;
-        }
-
-        if ($this->hero->getSpeed() > $this->opponent->getSpeed())
-        {
-            $this->disposition = [
-                'attacker' => $this->hero,
-                'defender' => $this->opponent,
-            ];
-            return;
-        }
-
-    }
-
-    private function compareLuck(): void
-    {
-        if ($this->hero->getLuck() > $this->opponent->getLuck())
-        {
-            $this->disposition = [
-                'attacker' => $this->hero,
-                'defender' => $this->opponent,
-            ];
-            return;
-        }
-
-        if ($this->hero->getLuck() == $this->opponent->getLuck())
-        {
-            throw new LogicException("Can't determine first attacker");
-        }
-    }
-
-    private function isMagicShield(): bool
-    {
-        return (method_exists($this->disposition['defender'], 'isMagicShield') && $this->disposition['defender']->isMagicShield());
-    }
-
-    private function calculateDamage(): void
-    {
-        // defender gets lucky this turn
-        if ($this->disposition['defender']->isLucky())
-        {
-            return;
-        }
-
-        $damage = $this->disposition['attacker']->getStrength() - $this->disposition['defender']->getDefence();
-
-        // if defender is hero and he gets power of magicShield this turn
-        if ($this->isMagicShield())
-        {
-            $damage = intval(floor($damage / 2));
-        }
-
-        $this->disposition['defender']->setHealth(
-            $this->disposition['defender']->getHealth() - $damage
-        );
-    }
-
-    private function inverseDisposition(): void
-    {
-        $keys = array_keys($this->disposition);
-        $values = array_values($this->disposition);
-        $reversedKeys = array_reverse($keys);
-
-        if ( $combinedArray = array_combine($reversedKeys, $values) )
-        {
-            $this->disposition = $combinedArray;
-            return;
-        }
-
-        throw new LogicException("Can not inverse attacker and defender");
-    }
-
-    private function isDefenderHasEnoughHealth(): bool
-    {
-        return $this->disposition['defender']->getHealth() > 0;
-    }
-
-    private function isRapidStrike(): bool
-    {
-        return (method_exists($this->disposition['attacker'], 'isRapidStrike') && $this->disposition['attacker']->isRapidStrike());
-    }
-
-    private function attack(): void
-    {
-        if ($this->isDefenderHasEnoughHealth())
-        {
-            $this->calculateDamage(); // attack
-            if ($this->isRapidStrike())
+            if ($this->canContinue === false)
             {
-                $this->calculateDamage(); // Orderus gets lucky enough to make second attack
+                $this->sendFinalMessage($i);
+                break;
             }
-            $this->inverseDisposition();
 
-            return;
+            $this->inverseRoles($disposition);
         }
-
-        throw new LogicException("{$this->disposition['defender']->getUnitName()} has been defeated!");
     }
 
-    public function run(): void
+    private function attack(int $turnNumber): void
     {
-        for ($i = 1; $i <= 20; ++$i)
+        $this->strike();
+        $this->sendMessage($turnNumber);
+
+        if ($this->attacker->isRapidStrike() === true && $this->canContinue === true)
         {
-            $this->attack();
+            $this->attacker->setRapidStrikeFalse();
+            $this->attack($turnNumber);
+        }
+    }
+
+    private function strike(): void
+    {
+        $this->defender->setDamage($this->calculateDamage());
+
+        $this->canContinue = $this->defender->calculateHealth();
+    }
+
+    private function calculateDamage(): int
+    {
+        $attackerStrength = $this->attacker->attack();
+        $defenderDefence = $this->defender->defend();
+
+        if ($this->defender->isLucky() === true )
+        {
+            return 0;
+        }
+
+        if ($this->defender->isMagicShield() === true)
+        {
+            return intval(($attackerStrength - $defenderDefence) / 2);
+        }
+
+        return $attackerStrength - $defenderDefence;
+    }
+
+    private function sendMessage(int $turnNumber): void
+    {
+        try {
+            $messageFactory = new MessageFactory();
+            $message = $messageFactory->build('statistic', $this->attacker, $this->defender, $turnNumber);
+            $this->output->yield($message);
+        } catch (\Throwable $e) {
+            die($e->getMessage());
+        }
+    }
+
+    private function sendInitialMessage(): void
+    {
+        try {
+            $messageFactory = new MessageFactory();
+            $message = $messageFactory->build('initial', $this->attacker, $this->defender);
+            $this->output->yield($message);
+        } catch (\Throwable $e) {
+            die($e->getMessage());
+        }
+    }
+
+    private function sendFinalMessage(int $turnNumber): void
+    {
+        try {
+            $messageFactory = new MessageFactory();
+            $message = $messageFactory->build('final', $this->attacker, $this->defender, $turnNumber);
+            $this->output->yield($message);
+        } catch (\Throwable $e) {
+            die($e->getMessage());
         }
     }
 }
