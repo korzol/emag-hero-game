@@ -6,6 +6,7 @@ namespace App\Battle\Message;
 
 use App\Battle\Participants\Attacker;
 use App\Battle\Participants\Defender;
+use InvalidArgumentException;
 
 class MessageFactory
 {
@@ -15,9 +16,14 @@ class MessageFactory
         "final" => FinalMessage::class,
     ];
 
+
     /**
      * @param string $messageType Type of message: initial, statistical (issued after each strike) or final one
+     * @param Attacker $attacker
+     * @param Defender $defender
+     * @param int|null $turnNumber
      * @return MessageInterface
+     * @throws \Exception
      */
     public function build(string $messageType, Attacker $attacker, Defender $defender, ?int $turnNumber=null): MessageInterface
     {
@@ -31,7 +37,7 @@ class MessageFactory
             return new $this->messageTypes[$messageType]($statsData);
         }
 
-        throw new \Exception("Unknown message type requested");
+        throw new InvalidArgumentException("Unknown message type requested");
     }
 
     private function buildStatsArray(Attacker $attacker, Defender $defender): array

@@ -3,12 +3,19 @@ declare(strict_types=1);
 
 namespace App\Battle\Message;
 
+use Exception;
+
 final class FinalMessage implements MessageInterface
 {
     private array $statsData;
 
     public function __construct(array $statsData)
     {
+        if (!isset($statsData['turnNumber']))
+        {
+            throw new Exception('Can not create Message object. Turn number is mandatory');
+        }
+
         $this->statsData = $statsData;
     }
 
