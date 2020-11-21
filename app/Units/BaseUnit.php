@@ -39,6 +39,11 @@ class BaseUnit implements BaseUnitInterface
     private $unitName;
 
     /**
+     * @var bool $isLucky
+     */
+    private $isLucky;
+
+    /**
      * BaseUnit constructor.
      * @param int $health
      * @param int $strength
@@ -139,7 +144,9 @@ class BaseUnit implements BaseUnitInterface
 
         $randomValue = random_int(0, 1000);
 
-        return $randomValue <= $luck;
+        $this->isLucky = $randomValue <= $luck;
+
+        return $this->isLucky;
     }
 
     /**
@@ -188,5 +195,25 @@ class BaseUnit implements BaseUnitInterface
     public function getLuck(): int
     {
         return $this->luck;
+    }
+
+    /**
+     * This method is here for debug and test purposes only
+     * @return bool
+     */
+    public function getIsLucky(): bool
+    {
+        return $this->isLucky;
+    }
+
+    public function debug(): array
+    {
+        return [
+            'health' => $this->getHealth(),
+            'strength' => $this->getStrength(),
+            'defence' => $this->getDefence(),
+            'speed' => $this->getSpeed(),
+            'isLucky' => $this->getIsLucky(), // we shouldn't generate new value, we need to get existing one
+        ];
     }
 }

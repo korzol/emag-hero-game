@@ -14,9 +14,19 @@ class Hero extends BaseUnit implements HeroInterface
     private $rapidStrike;
 
     /**
+     * @var bool $isRapidStrike
+     */
+    private $isRapidStrike;
+
+    /**
      * @var int $magicShield
      */
     private $magicShield;
+
+    /**
+     * @var bool $isMagicShield
+     */
+    private $isMagicShield;
 
     /**
      * Hero constructor.
@@ -97,7 +107,9 @@ class Hero extends BaseUnit implements HeroInterface
 
         $randomValue = random_int(0, 1000);
 
-        return $randomValue <= $probability;
+        $this->isRapidStrike = $randomValue <= $probability;
+
+        return $this->isRapidStrike;
     }
 
     /**
@@ -110,6 +122,19 @@ class Hero extends BaseUnit implements HeroInterface
 
         $randomValue = random_int(0, 1000);
 
-        return $randomValue <= $probability;
+        $this->isMagicShield = $randomValue <= $probability;
+
+        return $this->isMagicShield;
+    }
+
+    public function debug(): array
+    {
+        return array_merge(
+            parent::debug(),
+            [
+                'isRapidStrike' => $this->isRapidStrike,
+                'isMagicShield' => $this->isMagicShield,
+            ]
+        );
     }
 }
