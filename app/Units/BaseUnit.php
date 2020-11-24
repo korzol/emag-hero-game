@@ -206,6 +206,9 @@ class BaseUnit implements BaseUnitInterface
         return $this->isLucky;
     }
 
+    /**
+     * @return array<string, int|bool>
+     */
     public function debug(): array
     {
         return [

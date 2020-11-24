@@ -84,6 +84,9 @@ class Disposition
         }
     }
 
+    /**
+     * @return array{'attacker': Attacker, 'defender': Defender}
+     */
     public function inversePositions(): array
     {
         $keys = array_keys($this->position);
@@ -99,6 +102,9 @@ class Disposition
         throw new LogicException("Can not inverse attacker and defender");
     }
 
+    /**
+     * @return array{'attacker': Attacker, 'defender': Defender}
+     */
     private function convertUnitsToRoles(): array
     {
         return [
@@ -107,6 +113,9 @@ class Disposition
         ];
     }
 
+    /**
+     * @return array{'attacker': Attacker, 'defender': Defender}
+     */
     public function getPositions(): array
     {
         return $this->convertUnitsToRoles();

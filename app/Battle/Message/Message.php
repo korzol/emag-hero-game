@@ -6,13 +6,81 @@ namespace App\Battle\Message;
 
 final class Message implements MessageInterface
 {
+    /**
+     * @var array{
+     *   attacker: array{
+     *       name: string,
+     *       health: int,
+     *       strength: int,
+     *       defence: int,
+     *       speed: int,
+     *       isRapidStrike: bool
+     *   },
+     *   defender: array{
+     *       name: string,
+     *       health: int,
+     *       strength: int,
+     *       defence: int,
+     *       speed: int,
+     *       isLucky: bool,
+     *       isMagicShield: bool,
+     *       damage: int,
+     *   },
+     * }
+     */
     private array $statsData;
 
+    /**
+     * @param array{
+     *   attacker: array{
+     *       name: string,
+     *       health: int,
+     *       strength: int,
+     *       defence: int,
+     *       speed: int,
+     *       isRapidStrike: bool
+     *   },
+     *   defender: array{
+     *       name: string,
+     *       health: int,
+     *       strength: int,
+     *       defence: int,
+     *       speed: int,
+     *       isLucky: bool,
+     *       isMagicShield: bool,
+     *       damage: int,
+     *   },
+     * } $statsData
+     */
     public function __construct(array $statsData)
     {
         $this->statsData = $statsData;
     }
 
+    /**
+     * @return array{
+     *   attacker: array{
+     *       name: string,
+     *       health: int,
+     *       strength: int,
+     *       defence: int,
+     *       speed: int,
+     *       isRapidStrike: bool
+     *   },
+     *   defender: array{
+     *       name: string,
+     *       health: int,
+     *       strength: int,
+     *       defence: int,
+     *       speed: int,
+     *       isLucky: bool,
+     *       isMagicShield: bool,
+     *       damage: int,
+     *   },
+     *   message: string,
+     *   messageType: string,
+     * }
+     */
     public function generateMessage(): array
     {
         if ($this->statsData['defender']['isLucky'])
@@ -45,12 +113,8 @@ final class Message implements MessageInterface
             ];
         }
 
-        return array_merge(
-            $this->statsData,
-            $message,
-            [
-                "messageType" => "statistic"
-            ]
-        );
+        // I'd prefer array_merge but phpstan raise false positive
+        // See: https://github.com/phpstan/phpstan/issues/2567
+        return $this->statsData + $message + ["messageType" => "statistic"];
     }
 }

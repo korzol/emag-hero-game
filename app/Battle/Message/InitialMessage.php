@@ -5,21 +5,90 @@ namespace App\Battle\Message;
 
 final class InitialMessage implements MessageInterface
 {
+    /**
+     * @var array{
+     *   attacker: array{
+     *       name: string,
+     *       health: int,
+     *       strength: int,
+     *       defence: int,
+     *       speed: int,
+     *       isRapidStrike: bool
+     *   },
+     *   defender: array{
+     *       name: string,
+     *       health: int,
+     *       strength: int,
+     *       defence: int,
+     *       speed: int,
+     *       isLucky: bool,
+     *       isMagicShield: bool,
+     *       damage: int,
+     *   },
+     * }
+     */
     private array $statsData;
 
+    /**
+     * @param array{
+     *   attacker: array{
+     *       name: string,
+     *       health: int,
+     *       strength: int,
+     *       defence: int,
+     *       speed: int,
+     *       isRapidStrike: bool
+     *   },
+     *   defender: array{
+     *       name: string,
+     *       health: int,
+     *       strength: int,
+     *       defence: int,
+     *       speed: int,
+     *       isLucky: bool,
+     *       isMagicShield: bool,
+     *       damage: int,
+     *   },
+     * } $statsData
+     */
     public function __construct(array $statsData)
     {
         $this->statsData = $statsData;
     }
 
+    /**
+     * @return array{
+     *   attacker: array{
+     *       name: string,
+     *       health: int,
+     *       strength: int,
+     *       defence: int,
+     *       speed: int,
+     *       isRapidStrike: bool
+     *   },
+     *   defender: array{
+     *       name: string,
+     *       health: int,
+     *       strength: int,
+     *       defence: int,
+     *       speed: int,
+     *       isLucky: bool,
+     *       isMagicShield: bool,
+     *       damage: int,
+     *   },
+     *   message: string,
+     *   messageType: string,
+     * }
+     */
     public function generateMessage(): array
     {
-        return array_merge(
-            $this->statsData,
+        // I'd prefer array_merge but phpstan raise false positive
+        // See: https://github.com/phpstan/phpstan/issues/2567
+        return
+            $this->statsData +
             [
                 "message" => "Initial participants disposition",
                 "messageType" => "initial",
-            ],
-        );
+            ];
     }
 }

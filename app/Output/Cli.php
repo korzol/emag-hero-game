@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Output;
 
 use App\Battle\Message\MessageInterface;
+use Exception;
 
 final class Cli implements OutputInterface
 {
@@ -16,6 +17,10 @@ final class Cli implements OutputInterface
         "green" => "\e[92m",
     ];
 
+    /**
+     * @param MessageInterface $messages
+     * @return string[]
+     */
     private function initialMessage(MessageInterface $messages): array
     {
         $messageArray = $messages->generateMessage();
@@ -29,6 +34,10 @@ final class Cli implements OutputInterface
         ];
     }
 
+    /**
+     * @param MessageInterface $messages
+     * @return string[]
+     */
     private function statisticMessage(MessageInterface $messages): array
     {
         $messageArray = $messages->generateMessage();
@@ -51,6 +60,10 @@ final class Cli implements OutputInterface
         ];
     }
 
+    /**
+     * @param MessageInterface $messages
+     * @return string[]
+     */
     private function finalMessage(MessageInterface $messages): array
     {
         $messageArray = $messages->generateMessage();
@@ -73,6 +86,9 @@ final class Cli implements OutputInterface
         ];
     }
 
+    /**
+     * @param MessageInterface $messages
+     */
     public function yield(MessageInterface $messages): void
     {
         $legend = '';
@@ -85,6 +101,8 @@ final class Cli implements OutputInterface
             $message = $this->statisticMessage($messages);
         } elseif ($messages->generateMessage()['messageType'] == 'final') {
             $message = $this->finalMessage($messages);
+        } else {
+            throw new Exception('Unknown message type received');
         }
 
 
@@ -99,7 +117,8 @@ final class Cli implements OutputInterface
         $m .= PHP_EOL;
         echo $legend;
         echo self::COLORS['blue'].$messages->generateMessage()['message'].self::COLORS['default'].PHP_EOL;
-        echo passthru('echo -e "'.$m.'" | column -t -s"~"').PHP_EOL.PHP_EOL;
+        passthru('echo -e "'.$m.'" | column -t -s"~"');
+        echo PHP_EOL,PHP_EOL;
 
     }
 }
