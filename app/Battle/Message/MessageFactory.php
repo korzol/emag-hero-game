@@ -8,7 +8,7 @@ use App\Battle\Participants\Attacker;
 use App\Battle\Participants\Defender;
 use InvalidArgumentException;
 
-class MessageFactory
+final class MessageFactory
 {
     /**
      * @var array|string[]

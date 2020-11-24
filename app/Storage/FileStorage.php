@@ -6,7 +6,7 @@ namespace App\Storage;
 use UnexpectedValueException;
 use Symfony\Component\Yaml\Yaml;
 
-class FileStorage implements StorageInterface
+final class FileStorage implements StorageInterface
 {
     private const UNITS_CONFIGURATION_FILE = 'UnitsConfiguration.yml';
 

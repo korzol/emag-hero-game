@@ -6,7 +6,7 @@ namespace App\Units\Heroes;
 use App\Units\BaseUnit;
 use UnexpectedValueException;
 
-class Hero extends BaseUnit implements HeroInterface
+final class Hero extends BaseUnit implements HeroInterface
 {
     /**
      * @var int $rapidStrike

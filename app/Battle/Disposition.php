@@ -8,7 +8,7 @@ use App\Battle\Participants\Defender;
 use App\Units\BaseUnitInterface;
 use LogicException;
 
-class Disposition
+final class Disposition
 {
     /**
      * @var BaseUnitInterface $hero
